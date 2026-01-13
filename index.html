@@ -1,0 +1,375 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no" />
+    <meta name="theme-color" content="#FF3B30" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="Chef Paul's Pizza" />
+    <title>Chef Paul's Umami Pizza Kitchen | Gaborone's Best Pizza</title>
+    <meta name="description" content="Experience authentic pizzas at Chef Paul's Umami Pizza Kitchen in Gaborone. Order online for delivery or pickup." />
+    <link rel="icon" type="image/svg+xml" href="/pizza-icon.svg" />
+  </head>
+  <body>
+    <div id="app">
+      <nav class="navbar">
+        <div class="container">
+          <div class="nav-brand">
+            <h1>Chef Paul's</h1>
+            <span class="tagline">Umami Pizza Kitchen</span>
+          </div>
+          <div class="nav-links">
+            <a href="#menu">Menu</a>
+            <a href="#specials">Specials</a>
+            <a href="#reviews">Reviews</a>
+            <a href="#contact">Contact</a>
+            <button class="cart-btn" id="cartBtn">
+              <span class="cart-icon">🛒</span>
+              <span class="cart-count">0</span>
+            </button>
+          </div>
+        </div>
+      </nav>
+
+      <section class="hero">
+        <div class="hero-content">
+          <h2 class="hero-title">Authentic Pizza, Crafted with Passion</h2>
+          <p class="hero-subtitle">Experience the perfect blend of traditional Italian flavors and Botswana warmth at Chef Paul's Umami Pizza Kitchen</p>
+          <div class="hero-cta">
+            <a href="#menu" class="btn btn-primary btn-lg">Order Now</a>
+            <a href="#contact" class="btn btn-outline btn-lg">View Menu</a>
+          </div>
+        </div>
+        <div class="hero-image">
+          <img src="https://images.pexels.com/photos/1146760/pexels-photo-1146760.jpeg?auto=compress&cs=tinysrgb&w=1200" alt="Delicious pizza" />
+        </div>
+      </section>
+
+      <section id="menu" class="menu-section">
+        <div class="container">
+          <div class="section-header">
+            <h2>Signature Menu</h2>
+            <p class="section-subtitle">Pizzas we serve every day</p>
+            <p class="section-description">Pick your favorite size and add it to your cart</p>
+          </div>
+
+          <div class="menu-grid">
+            <div class="menu-card">
+              <div class="card-tag best-seller">Best Seller</div>
+              <div class="card-image">
+                <img src="https://images.pexels.com/photos/708587/pexels-photo-708587.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Meat Lovers Pizza" loading="lazy" />
+              </div>
+              <div class="card-content">
+                <div class="card-header">
+                  <h3>Meat Lovers</h3>
+                  <span class="pill pill-classic">Classic</span>
+                </div>
+                <p class="card-description">Loaded with pepperoni, sausage, bacon, and ham on our signature sauce and mozzarella cheese</p>
+
+                <div class="size-selector">
+                  <button class="size-btn active" data-pizza="meat-lovers" data-size="large-small" data-price="170">Large+Small</button>
+                  <button class="size-btn" data-pizza="meat-lovers" data-size="double" data-price="270">On the Double</button>
+                  <button class="size-btn" data-pizza="meat-lovers" data-size="triple" data-price="370">Triple Decker</button>
+                </div>
+
+                <div class="card-footer">
+                  <span class="price">P<span class="price-amount">170</span></span>
+                  <button class="btn btn-primary add-to-cart" data-name="Meat Lovers" data-price="170" data-size="Large+Small">Add to Cart</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="menu-card">
+              <div class="card-tag spicy">Spicy Favorite</div>
+              <div class="card-image">
+                <img src="https://images.pexels.com/photos/1653877/pexels-photo-1653877.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Mexican Chilli Pizza" loading="lazy" />
+              </div>
+              <div class="card-content">
+                <div class="card-header">
+                  <h3>Mexican Chilli</h3>
+                  <span class="pill pill-gourmet">Gourmet</span>
+                </div>
+                <p class="card-description">Spicy jalapeños, bell peppers, onions, and Mexican beef with a kick of chilli sauce</p>
+
+                <div class="size-selector">
+                  <button class="size-btn active" data-pizza="mexican-chilli" data-size="large-small" data-price="180">Large+Small</button>
+                  <button class="size-btn" data-pizza="mexican-chilli" data-size="double" data-price="280">On the Double</button>
+                  <button class="size-btn" data-pizza="mexican-chilli" data-size="triple" data-price="380">Triple Decker</button>
+                </div>
+
+                <div class="card-footer">
+                  <span class="price">P<span class="price-amount">180</span></span>
+                  <button class="btn btn-primary add-to-cart" data-name="Mexican Chilli" data-price="180" data-size="Large+Small">Add to Cart</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="menu-card">
+              <div class="card-tag rich">Rich & Creamy</div>
+              <div class="card-image">
+                <img src="https://images.pexels.com/photos/905847/pexels-photo-905847.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Creamy Chicken Pizza" loading="lazy" />
+              </div>
+              <div class="card-content">
+                <div class="card-header">
+                  <h3>Creamy Chicken</h3>
+                  <span class="pill pill-gourmet">Gourmet</span>
+                </div>
+                <p class="card-description">Tender chicken breast, mushrooms, and herbs in our rich creamy white sauce</p>
+
+                <div class="size-selector">
+                  <button class="size-btn active" data-pizza="creamy-chicken" data-size="large-small" data-price="190">Large+Small</button>
+                  <button class="size-btn" data-pizza="creamy-chicken" data-size="double" data-price="290">On the Double</button>
+                  <button class="size-btn" data-pizza="creamy-chicken" data-size="triple" data-price="390">Triple Decker</button>
+                </div>
+
+                <div class="card-footer">
+                  <span class="price">P<span class="price-amount">190</span></span>
+                  <button class="btn btn-primary add-to-cart" data-name="Creamy Chicken" data-price="190" data-size="Large+Small">Add to Cart</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="specials" class="specials-section">
+        <div class="container">
+          <div class="section-header">
+            <h2>Limited Time Specials</h2>
+            <p class="section-subtitle">Exclusive offers you don't want to miss</p>
+          </div>
+
+          <div class="specials-grid">
+            <div class="special-card">
+              <div class="special-badge">Limited Time</div>
+              <img src="https://images.pexels.com/photos/2147491/pexels-photo-2147491.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Family Bundle" loading="lazy" />
+              <h3>Family Bundle</h3>
+              <p>2 Large Pizzas + 1 Medium + 2L Soda</p>
+              <span class="special-price">P550 <small>Save P100</small></span>
+            </div>
+
+            <div class="special-card">
+              <div class="special-badge">New</div>
+              <img src="https://images.pexels.com/photos/315755/pexels-photo-315755.jpeg?auto=compress&cs=tinysrgb&w=800" alt="BBQ Pulled Pork" loading="lazy" />
+              <h3>BBQ Pulled Pork</h3>
+              <p>Slow-cooked pork with tangy BBQ sauce</p>
+              <span class="special-price">P195</span>
+            </div>
+
+            <div class="special-card">
+              <div class="special-badge">Weekend Special</div>
+              <img src="https://images.pexels.com/photos/1596888/pexels-photo-1596888.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Buy 2 Get 1" loading="lazy" />
+              <h3>Weekend Deal</h3>
+              <p>Buy 2 Large Pizzas, Get 1 Small Free</p>
+              <span class="special-price">Fri-Sun Only</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="reviews" class="reviews-section">
+        <div class="container">
+          <div class="section-header">
+            <h2>Customer Reviews</h2>
+            <p class="section-subtitle">What our customers say about us</p>
+          </div>
+
+          <div class="reviews-container">
+            <div class="review-form-card">
+              <h3>Share Your Experience</h3>
+              <form id="reviewForm">
+                <div class="form-group">
+                  <label for="customerName">Your Name</label>
+                  <input type="text" id="customerName" name="customerName" required placeholder="Enter your name" />
+                </div>
+
+                <div class="form-group">
+                  <label>Rating</label>
+                  <div class="star-rating" id="starRating">
+                    <span class="star" data-rating="1">★</span>
+                    <span class="star" data-rating="2">★</span>
+                    <span class="star" data-rating="3">★</span>
+                    <span class="star" data-rating="4">★</span>
+                    <span class="star" data-rating="5">★</span>
+                  </div>
+                  <input type="hidden" id="rating" name="rating" value="0" required />
+                </div>
+
+                <div class="form-group">
+                  <label for="comment">Your Review</label>
+                  <textarea id="comment" name="comment" rows="4" placeholder="Tell us about your experience..."></textarea>
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-block">Submit Review</button>
+              </form>
+            </div>
+
+            <div class="reviews-list" id="reviewsList">
+              <div class="loading">Loading reviews...</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="contact" class="contact-section">
+        <div class="container">
+          <div class="section-header">
+            <h2>We would love to hear from you</h2>
+            <p class="section-subtitle">Call us, visit us, or drop us a note</p>
+          </div>
+
+          <div class="contact-grid">
+            <div class="contact-card">
+              <div class="contact-icon">📍</div>
+              <h3>Location</h3>
+              <p><strong>Chef Paul's Umami Pizza Kitchen</strong></p>
+              <p>Gaborone | Bontleng and Block 9</p>
+              <div class="map-container">
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d57515.15!2d25.9086!3d-24.6282!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1ebf83e8c1e0d3e7%3A0x4c0d9b6ec0e1d8d0!2sGaborone%2C%20Botswana!5e0!3m2!1sen!2s!4v1234567890123!5m2!1sen!2s" width="100%" height="250" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+              </div>
+            </div>
+
+            <div class="contact-card">
+              <div class="contact-icon">🕐</div>
+              <h3>Business Hours</h3>
+              <ul class="hours-list">
+                <li><span>Monday - Thursday</span><span>11:00 - 22:00</span></li>
+                <li><span>Friday - Saturday</span><span>11:00 - 23:00</span></li>
+                <li><span>Sunday</span><span>12:00 - 21:00</span></li>
+              </ul>
+            </div>
+
+            <div class="contact-card">
+              <div class="contact-icon">📞</div>
+              <h3>Contact</h3>
+              <p><strong>Phone:</strong> <a href="tel:+26777638172">+267 77 638 172</a></p>
+              <p><strong>Email:</strong> <a href="mailto:paulnyeku@gmail.com">paulnyeku@gmail.com</a></p>
+              <p><strong>Delivery:</strong> Gaborone | Tlokweng</p>
+              <p class="delivery-fee">P50 delivery fee</p>
+            </div>
+          </div>
+
+          <div class="faq-section">
+            <h3>Frequently Asked Questions</h3>
+            <div class="faq-list">
+              <div class="faq-item">
+                <button class="faq-question">
+                  <span>What are your delivery hours?</span>
+                  <span class="faq-icon">+</span>
+                </button>
+                <div class="faq-answer">
+                  <p>We deliver from 11:00 AM to 10:00 PM daily. Hours may vary on holidays.</p>
+                </div>
+              </div>
+
+              <div class="faq-item">
+                <button class="faq-question">
+                  <span>Do you offer catering services?</span>
+                  <span class="faq-icon">+</span>
+                </button>
+                <div class="faq-answer">
+                  <p>Yes! We offer catering for events and parties. Please contact us at least 24 hours in advance to arrange your catering order.</p>
+                </div>
+              </div>
+
+              <div class="faq-item">
+                <button class="faq-question">
+                  <span>Do you have vegetarian or vegan options?</span>
+                  <span class="faq-icon">+</span>
+                </button>
+                <div class="faq-answer">
+                  <p>Absolutely! We have a variety of vegetarian pizzas and can accommodate vegan requests with dairy-free cheese upon request.</p>
+                </div>
+              </div>
+
+              <div class="faq-item">
+                <button class="faq-question">
+                  <span>Can I track my order?</span>
+                  <span class="faq-icon">+</span>
+                </button>
+                <div class="faq-answer">
+                  <p>Yes! After checkout, you'll receive a tracking link via SMS or email to monitor your order status in real-time.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="cta-bar">
+            <div class="cta-content">
+              <h3>Ready to order?</h3>
+              <p>Start your order now and enjoy delicious pizza in minutes</p>
+            </div>
+            <a href="#menu" class="btn btn-primary btn-lg">Start Order</a>
+          </div>
+        </div>
+      </section>
+
+      <footer class="footer">
+        <div class="container">
+          <div class="footer-grid">
+            <div class="footer-col">
+              <h4>Chef Paul's</h4>
+              <p class="footer-tagline">Umami Pizza Kitchen</p>
+              <p>Serving Gaborone's finest pizzas since day one. Made with love, served with passion.</p>
+            </div>
+
+            <div class="footer-col">
+              <h4>Quick Links</h4>
+              <ul class="footer-links">
+                <li><a href="#menu">Menu</a></li>
+                <li><a href="#specials">Specials</a></li>
+                <li><a href="#reviews">Reviews</a></li>
+                <li><a href="#contact">Contact</a></li>
+              </ul>
+            </div>
+
+            <div class="footer-col">
+              <h4>Contact</h4>
+              <ul class="footer-contact">
+                <li>+267 77 638 172</li>
+                <li>paulnyeku@gmail.com</li>
+                <li>Gaborone | Bontleng</li>
+                <li>Block 9</li>
+              </ul>
+            </div>
+
+            <div class="footer-col">
+              <h4>Hours</h4>
+              <ul class="footer-hours">
+                <li>Mon-Thu: 11:00-22:00</li>
+                <li>Fri-Sat: 11:00-23:00</li>
+                <li>Sun: 12:00-21:00</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="footer-bottom">
+            <p>&copy; 2024 Chef Paul's Umami Pizza Kitchen. All rights reserved.</p>
+          </div>
+        </div>
+      </footer>
+
+      <div id="cartModal" class="modal">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h3>Your Cart</h3>
+            <button class="modal-close" id="closeCart" aria-label="Close cart">&times;</button>
+          </div>
+          <div class="modal-body" id="cartItems">
+            <p class="empty-cart">Your cart is empty</p>
+          </div>
+          <div class="modal-footer" id="cartFooter" style="display: none;">
+            <div class="cart-total">
+              <span>Total:</span>
+              <span class="total-amount">P0</span>
+            </div>
+            <button class="btn btn-primary btn-block">Proceed to Checkout</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
