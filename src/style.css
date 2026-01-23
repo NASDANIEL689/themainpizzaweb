@@ -63,12 +63,18 @@ h3 {
 }
 
 .navbar {
-  background: var(--white);
-  box-shadow: var(--shadow);
+  background: var(--light-gray);
+  box-shadow: none;
   position: sticky;
   top: 0;
   z-index: 1000;
   padding: 0.75rem 0;
+  transition: background 0.25s ease, box-shadow 0.25s ease;
+}
+
+.navbar.is-sticky {
+  background: var(--white);
+  box-shadow: var(--shadow);
 }
 
 .navbar .container {
@@ -91,11 +97,94 @@ h3 {
   font-weight: 400;
 }
 
+.nav-logo {
+  height: clamp(120px, 10vw, 140px);
+  width: auto;
+  display: block;
+  transition: height 0.25s ease;
+}
+
+.navbar.is-sticky .nav-logo {
+  height: clamp(76px, 10vw, 92px);
+}
+
 .nav-links {
   display: flex;
   gap: clamp(0.75rem, 3vw, 2rem);
   align-items: center;
   flex-wrap: wrap;
+}
+
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.nav-toggle {
+  display: none;
+  flex-direction: column;
+  gap: 6px;
+  background: none;
+  border: none;
+  padding: 0.25rem;
+  cursor: pointer;
+}
+
+.nav-toggle span {
+  display: block;
+  width: 26px;
+  height: 3px;
+  background: var(--dark-gray);
+  border-radius: 2px;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.nav-toggle.is-open span:nth-child(1) {
+  transform: translateY(6px) rotate(45deg);
+}
+
+.nav-toggle.is-open span:nth-child(2) {
+  opacity: 0;
+}
+
+.nav-toggle.is-open span:nth-child(3) {
+  transform: translateY(-6px) rotate(-45deg);
+}
+
+@media (max-width: 768px) {
+  .navbar .container {
+    align-items: center;
+    position: relative;
+  }
+
+  .nav-links {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: var(--white);
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+    padding: 1rem 1.25rem;
+    box-shadow: var(--shadow);
+    display: none;
+  }
+
+  .nav-links.open {
+    display: flex;
+  }
+
+  .nav-links a {
+    width: 100%;
+  }
+
+  .nav-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
 }
 
 .nav-links a {
@@ -155,8 +244,8 @@ section {
   grid-template-columns: 1fr;
   gap: clamp(1.5rem, 4vw, 4rem);
   align-items: center;
-  padding: clamp(2rem, 6vw, 5rem) 0;
-  background: linear-gradient(135deg, var(--light-gray) 0%, var(--white) 100%);
+  padding: clamp(1.25rem, 3.5vw, 3rem) 0;
+  background: var(--light-gray);
 }
 
 .hero .container {
@@ -193,7 +282,7 @@ section {
 
 .hero-image img {
   width: 100%;
-  height: clamp(250px, 60vw, 500px);
+  height: clamp(200px, 45vw, 340px);
   object-fit: cover;
   border-radius: 20px;
   box-shadow: var(--shadow-lg);
@@ -1042,6 +1131,108 @@ section {
 .modal-footer {
   padding: clamp(1rem, 4vw, 1.5rem);
   border-top: 1px solid var(--medium-gray);
+  display: flex;
+  gap: 1rem;
+}
+
+.modal-footer .btn {
+  flex: 1;
+}
+
+.checkout-summary {
+  border: 1px solid var(--medium-gray);
+  border-radius: 12px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  background: var(--light-gray);
+}
+
+.checkout-line {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+  font-size: 0.95rem;
+}
+
+.checkout-line .muted {
+  color: #666;
+  font-size: 0.85rem;
+}
+
+.checkout-total {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 0.75rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--medium-gray);
+  font-size: 1rem;
+}
+
+.checkout-form .form-group {
+  margin-bottom: 1rem;
+}
+
+.inline-options {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.inline-options label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  cursor: pointer;
+}
+
+.option-pill {
+  border: 1px solid var(--medium-gray);
+  border-radius: 999px;
+  padding: 0.5rem 0.9rem;
+  background: var(--white);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.option-pill input {
+  accent-color: var(--primary-red);
+}
+
+.option-pill .pill-tick {
+  display: none;
+  color: var(--primary-red);
+  font-weight: 700;
+}
+
+.option-pill input:checked + .pill-label + .pill-tick {
+  display: inline;
+}
+
+.option-pill input:checked ~ .pill-label {
+  font-weight: 700;
+  color: var(--primary-red);
+}
+
+.option-pill input:checked ~ .pill-tick {
+  display: inline;
+}
+
+.checkout-form input,
+.checkout-form textarea {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid var(--medium-gray);
+  border-radius: 10px;
+  font-size: 1rem;
+  font-family: inherit;
+}
+
+.checkout-form textarea {
+  resize: vertical;
 }
 
 .cart-total {
@@ -1071,6 +1262,10 @@ section {
   .specials-grid,
   .contact-grid {
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  }
+
+  .story-card {
+    grid-column: 1 / -1;
   }
 
   .cta-bar {

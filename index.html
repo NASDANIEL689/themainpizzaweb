@@ -16,17 +16,27 @@
       <nav class="navbar">
         <div class="container">
           <div class="nav-brand">
-            <h1>Chef Paul's</h1>
-            <span class="tagline">Umami Pizza Kitchen</span>
+            <img
+              src="pics/ChatGPT Image Aug 15, 2025, 06_31_25 PM.png"
+              alt="Chef Paul's Umami Pizza Kitchen logo"
+              class="nav-logo"
+            />
           </div>
-          <div class="nav-links">
+          <div class="nav-links" id="navLinks">
             <a href="#menu">Menu</a>
             <a href="#specials">Specials</a>
             <a href="#reviews">Reviews</a>
             <a href="#contact">Contact</a>
+          </div>
+          <div class="nav-actions">
             <button class="cart-btn" id="cartBtn">
-              <span class="cart-icon">🛒</span>
+              <span class="cart-icon"><img src="pics/icons8-cart-30.png" alt="Cart" /></span>
               <span class="cart-count">0</span>
+            </button>
+            <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation" aria-expanded="false">
+              <span></span>
+              <span></span>
+              <span></span>
             </button>
           </div>
         </div>
@@ -42,7 +52,7 @@
           </div>
         </div>
         <div class="hero-image">
-          <img src="https://images.pexels.com/photos/1146760/pexels-photo-1146760.jpeg?auto=compress&cs=tinysrgb&w=1200" alt="Delicious pizza" />
+          <img src="pics/615064265_868725999247204_7028444382915519187_n.jpg" alt="Delicious pizza" />
         </div>
       </section>
 
@@ -248,6 +258,14 @@
               <p><strong>Delivery:</strong> Gaborone | Tlokweng</p>
               <p class="delivery-fee">P50 delivery fee</p>
             </div>
+
+            <div class="contact-card story-card">
+              <div class="contact-icon">📜</div>
+              <h3>Our Story</h3>
+              <p><strong>From a single oven to Gaborone’s go-to spot.</strong></p>
+              <p>Chef Paul started with family recipes and a passion for umami-rich flavors. Today we craft every pizza by hand, using fresh local produce and slow-proofed dough for that signature bite.</p>
+              <p>Come taste the difference, or call us to learn about catering and special events.</p>
+            </div>
           </div>
 
           <div class="faq-section">
@@ -364,7 +382,57 @@
               <span>Total:</span>
               <span class="total-amount">P0</span>
             </div>
-            <button class="btn btn-primary btn-block">Proceed to Checkout</button>
+            <button class="btn btn-primary btn-block" id="checkoutBtn">Proceed to Checkout</button>
+          </div>
+        </div>
+      </div>
+
+      <div id="checkoutModal" class="modal">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h3>Checkout</h3>
+            <button class="modal-close" id="closeCheckout" aria-label="Close checkout">&times;</button>
+          </div>
+          <div class="modal-body">
+            <div id="checkoutSummary" class="checkout-summary"></div>
+            <form id="checkoutForm" class="checkout-form">
+              <div class="form-group">
+                <label>Order Type</label>
+                <div class="inline-options" id="orderTypeGroup">
+                  <label class="option-pill">
+                    <input type="radio" name="orderType" value="delivery" checked />
+                    <span class="pill-label">Delivery</span>
+                    <span class="pill-tick">✓</span>
+                  </label>
+                  <label class="option-pill">
+                    <input type="radio" name="orderType" value="pickup" />
+                    <span class="pill-label">Pickup</span>
+                    <span class="pill-tick">✓</span>
+                  </label>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="branchSelect">Choose Branch</label>
+                <select id="branchSelect" name="branchSelect" required>
+                  <option value="">Select branch</option>
+                  <option value="Bontleng">Bontleng</option>
+                  <option value="Block 9">Block 9</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="customerFullName">Full Name</label>
+                <input type="text" id="customerFullName" name="customerFullName" placeholder="Enter your name" required />
+              </div>
+              <div class="form-group">
+                <label for="customerPhone">Phone Number</label>
+                <input type="tel" id="customerPhone" name="customerPhone" placeholder="+267 77 000 000" required />
+              </div>
+              <div class="form-group" id="addressGroup">
+                <label for="customerAddress">Delivery Address</label>
+                <textarea id="customerAddress" name="customerAddress" rows="2" placeholder="Street, block, any delivery notes"></textarea>
+              </div>
+              <button type="submit" class="btn btn-primary btn-block" id="placeOrderBtn">Place Order</button>
+            </form>
           </div>
         </div>
       </div>

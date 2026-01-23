@@ -4,6 +4,60 @@ import { supabase } from './supabase.js';
 let cart = [];
 let selectedRating = 0;
 
+function groupCartItems(items) {
+  const grouped = {};
+  items.forEach((item) => {
+    const key = `${item.name}__${item.size}__${item.price}`;
+    if (!grouped[key]) {
+      grouped[key] = {
+        name: item.name,
+        size: item.size,
+        price: item.price,
+        quantity: 0
+      };
+    }
+    grouped[key].quantity += 1;
+  });
+  return Object.values(grouped).map((item) => ({
+    ...item,
+    total: item.price * item.quantity
+  }));
+}
+
+async function submitOrderToSupabase({ items, customerName, customerPhone, branch, orderType, address }) {
+  const orderItems = groupCartItems(items).map((item) => ({
+    item_name: item.name,
+    quantity: item.quantity,
+    unit_price: item.price,
+    notes: item.size ? `Size: ${item.size}` : null
+  }));
+
+  const mappedOrderType = orderType === 'pickup' ? 'takeaway' : 'online';
+  const notes = [
+    branch ? `Branch: ${branch}` : '',
+    orderType === 'delivery' && address ? `Address: ${address}` : '',
+    'Order Source: Website'
+  ]
+    .filter(Boolean)
+    .join(' | ');
+
+  const { data, error } = await supabase.rpc('create_public_order', {
+    items: orderItems,
+    customer_name: customerName,
+    customer_phone: customerPhone,
+    order_type: mappedOrderType,
+    notes: notes || null
+  });
+
+  if (error) throw error;
+  const order = Array.isArray(data) ? data[0] : data;
+  if (!order || !order.order_id) {
+    throw new Error('Order could not be created. Please check Supabase configuration.');
+  }
+
+  return order;
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   initializeSizeSelectors();
   initializeCart();
@@ -12,6 +66,8 @@ document.addEventListener('DOMContentLoaded', () => {
   loadReviews();
   initializeReviewForm();
   initializeSmoothScroll();
+  initializeNavbarScroll();
+  initializeMobileNav();
 
   if (window.innerWidth < 768) {
     document.body.addEventListener('touchmove', () => {}, { passive: true });
@@ -49,6 +105,7 @@ function initializeCart() {
   const cartBtn = document.getElementById('cartBtn');
   const cartModal = document.getElementById('cartModal');
   const closeCart = document.getElementById('closeCart');
+  const checkoutBtn = document.getElementById('checkoutBtn');
   const addToCartButtons = document.querySelectorAll('.add-to-cart');
 
   cartBtn.addEventListener('click', () => {
@@ -67,6 +124,10 @@ function initializeCart() {
       cartModal.classList.remove('show');
       document.body.style.overflow = '';
     }
+  });
+
+  checkoutBtn.addEventListener('click', () => {
+    openCheckout();
   });
 
   addToCartButtons.forEach(button => {
@@ -309,6 +370,198 @@ function initializeSmoothScroll() {
       }
     });
   });
+}
+
+function initializeNavbarScroll() {
+  const navbar = document.querySelector('.navbar');
+  if (!navbar) return;
+
+  const handleScroll = () => {
+    if (window.scrollY > 8) {
+      navbar.classList.add('is-sticky');
+    } else {
+      navbar.classList.remove('is-sticky');
+    }
+  };
+
+  handleScroll();
+  window.addEventListener('scroll', handleScroll, { passive: true });
+}
+
+function initializeMobileNav() {
+  const navToggle = document.getElementById('navToggle');
+  const navLinks = document.getElementById('navLinks');
+  const navbar = document.querySelector('.navbar');
+  if (!navToggle || !navLinks || !navbar) return;
+
+  const closeMenu = () => {
+    navLinks.classList.remove('open');
+    navToggle.classList.remove('is-open');
+    navToggle.setAttribute('aria-expanded', 'false');
+  };
+
+  navToggle.addEventListener('click', () => {
+    const isOpen = navLinks.classList.toggle('open');
+    navToggle.classList.toggle('is-open', isOpen);
+    navToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+  });
+
+  navLinks.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', () => closeMenu());
+  });
+
+  window.addEventListener(
+    'resize',
+    () => {
+      if (window.innerWidth > 768) {
+        closeMenu();
+      }
+    },
+    { passive: true }
+  );
+}
+
+function openCheckout() {
+  if (cart.length === 0) {
+    alert('Your cart is empty. Add a pizza before checking out.');
+    return;
+  }
+
+  const checkoutModal = document.getElementById('checkoutModal');
+  const checkoutSummary = document.getElementById('checkoutSummary');
+  const closeCheckout = document.getElementById('closeCheckout');
+  const checkoutForm = document.getElementById('checkoutForm');
+  const placeOrderBtn = document.getElementById('placeOrderBtn');
+  const orderTypeInputs = checkoutForm?.querySelectorAll('input[name="orderType"]');
+  const branchSelect = document.getElementById('branchSelect');
+  const addressGroup = document.getElementById('addressGroup');
+  const addressInput = document.getElementById('customerAddress');
+
+  if (!checkoutModal || !checkoutSummary || !closeCheckout || !checkoutForm || !placeOrderBtn) return;
+
+  renderCheckoutSummary(checkoutSummary);
+
+  checkoutModal.classList.add('show');
+  document.body.style.overflow = 'hidden';
+
+  const closeModal = () => {
+    checkoutModal.classList.remove('show');
+    document.body.style.overflow = '';
+  };
+
+  closeCheckout.onclick = closeModal;
+  checkoutModal.onclick = (e) => {
+    if (e.target === checkoutModal) closeModal();
+  };
+
+  const syncAddressRequirement = () => {
+    const selected = checkoutForm.querySelector('input[name="orderType"]:checked');
+    const isDelivery = selected?.value === 'delivery';
+    if (addressGroup) {
+      addressGroup.style.display = isDelivery ? 'block' : 'none';
+    }
+    if (addressInput) {
+      addressInput.required = isDelivery;
+      if (!isDelivery) {
+        addressInput.value = '';
+      }
+    }
+  };
+
+  orderTypeInputs?.forEach(input => {
+    input.addEventListener('change', syncAddressRequirement);
+  });
+
+  syncAddressRequirement();
+
+  checkoutForm.onsubmit = async (e) => {
+    e.preventDefault();
+    placeOrderBtn.textContent = 'Placing order...';
+    placeOrderBtn.disabled = true;
+
+    const name = checkoutForm.customerFullName.value.trim();
+    const phone = checkoutForm.customerPhone.value.trim();
+    const branch = branchSelect ? branchSelect.value : '';
+    const orderType = checkoutForm.querySelector('input[name="orderType"]:checked')?.value || 'delivery';
+    const address = checkoutForm.customerAddress.value.trim();
+
+    if (!name || !phone || !branch) {
+      alert('Please fill in your name, phone, and branch.');
+      placeOrderBtn.textContent = 'Place Order';
+      placeOrderBtn.disabled = false;
+      return;
+    }
+
+    if (orderType === 'delivery' && !address) {
+      alert('Please enter a delivery address.');
+      placeOrderBtn.textContent = 'Place Order';
+      placeOrderBtn.disabled = false;
+      return;
+    }
+
+    try {
+      const order = await submitOrderToSupabase({
+        items: cart,
+        customerName: name,
+        customerPhone: phone,
+        branch,
+        orderType,
+        address
+      });
+
+      alert(`Order ${order.order_number || ''} placed for ${orderType === 'delivery' ? 'delivery' : 'pickup'} at ${branch}! We will contact you shortly to confirm.`);
+      checkoutForm.reset();
+      cart = [];
+      updateCartCount();
+      updateCartDisplay();
+      closeModal();
+    } catch (error) {
+      console.error('Error placing order:', error);
+      alert('Failed to place order. Please try again.');
+    } finally {
+      placeOrderBtn.textContent = 'Place Order';
+      placeOrderBtn.disabled = false;
+    }
+  };
+}
+
+function renderCheckoutSummary(container) {
+  if (!container) return;
+
+  let total = 0;
+  let summary = '';
+  const branchSelect = document.getElementById('branchSelect');
+  const orderTypeSelected = document.querySelector('input[name="orderType"]:checked');
+
+  cart.forEach(item => {
+    total += item.price;
+    summary += `
+      <div class="checkout-line">
+        <div>
+          <strong>${item.name}</strong>
+          <div class="muted">${item.size}</div>
+        </div>
+        <span>P${item.price}</span>
+      </div>
+    `;
+  });
+
+  summary += `
+    <div class="checkout-line">
+      <div><strong>Order Type</strong></div>
+      <span>${orderTypeSelected ? orderTypeSelected.value : 'delivery'}</span>
+    </div>
+    <div class="checkout-line">
+      <div><strong>Branch</strong></div>
+      <span>${branchSelect && branchSelect.value ? branchSelect.value : 'Select branch'}</span>
+    </div>
+    <div class="checkout-total">
+      <span>Total</span>
+      <strong>P${total}</strong>
+    </div>
+  `;
+
+  container.innerHTML = summary;
 }
 
 function escapeHtml(text) {
