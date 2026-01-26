@@ -26,6 +26,12 @@ if (supabaseUrl && supabaseKey) {
           return { data: [], error: null };
         }
       };
+    },
+    async rpc() {
+      return {
+        data: null,
+        error: new Error('Supabase environment variables are not set')
+      };
     }
   };
 }
