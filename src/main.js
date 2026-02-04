@@ -180,12 +180,25 @@ function updateCartDisplay() {
           <h4>${item.name}</h4>
           <p>${item.size}</p>
         </div>
-        <span class="cart-item-price">P${item.price}</span>
+        <div class="cart-item-actions">
+          <span class="cart-item-price">P${item.price}</span>
+          <button class="cart-item-remove" data-index="${index}" aria-label="Remove item">&times;</button>
+        </div>
       </div>
     `;
   });
 
   cartItems.innerHTML = html;
+
+  cartItems.querySelectorAll('.cart-item-remove').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const index = parseInt(btn.dataset.index, 10);
+      if (Number.isNaN(index)) return;
+      cart.splice(index, 1);
+      updateCartCount();
+      updateCartDisplay();
+    });
+  });
 
   const totalAmount = cartFooter.querySelector('.total-amount');
   totalAmount.textContent = `P${total}`;
@@ -256,6 +269,7 @@ async function loadReviews() {
     const { data: reviews, error } = await supabase
       .from('reviews')
       .select('*')
+      .order('rating', { ascending: false })
       .order('created_at', { ascending: false });
 
     if (error) throw error;

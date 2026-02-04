@@ -673,6 +673,71 @@ section {
   gap: clamp(1rem, 3vw, 1.5rem);
 }
 
+.reviews-more {
+  margin-top: 2rem;
+  text-align: center;
+}
+
+.reviews-page {
+  padding: clamp(2rem, 6vw, 4rem) 0;
+}
+
+.reviews-header {
+  flex-wrap: wrap;
+}
+
+.reviews-header h1 {
+  font-size: clamp(1.4rem, 4vw, 1.8rem);
+  margin-bottom: 0.25rem;
+}
+
+.reviews-subtitle {
+  color: #666;
+  font-size: clamp(0.85rem, 2.5vw, 1rem);
+}
+
+.reviews-filter {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  align-items: flex-start;
+}
+
+.reviews-filter label {
+  font-weight: 600;
+  color: var(--dark-gray);
+  font-size: clamp(0.8rem, 2vw, 0.9rem);
+}
+
+.filter-select {
+  min-width: 200px;
+  padding: 0.6rem 0.9rem;
+  border: 1px solid var(--medium-gray);
+  border-radius: 10px;
+  font-size: 0.95rem;
+  background: var(--white);
+}
+
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  color: var(--primary-red);
+  text-decoration: none;
+  font-weight: 600;
+  margin-bottom: 0.35rem;
+}
+
+@media (max-width: 768px) {
+  .reviews-filter {
+    width: 100%;
+  }
+
+  .filter-select {
+    width: 100%;
+  }
+}
+
 .review-item {
   background: var(--light-gray);
   padding: clamp(1rem, 4vw, 1.5rem);
@@ -1110,6 +1175,12 @@ section {
   gap: 1rem;
 }
 
+.cart-item-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
 .cart-item-info h4 {
   margin-bottom: 0.25rem;
   color: var(--dark-gray);
@@ -1128,15 +1199,39 @@ section {
   flex-shrink: 0;
 }
 
+.cart-item-remove {
+  background: var(--white);
+  border: 1px solid var(--medium-gray);
+  color: var(--dark-gray);
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  font-size: 1.25rem;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.cart-item-remove:active {
+  transform: scale(0.95);
+  border-color: var(--primary-red);
+  color: var(--primary-red);
+}
+
 .modal-footer {
   padding: clamp(1rem, 4vw, 1.5rem);
   border-top: 1px solid var(--medium-gray);
   display: flex;
   gap: 1rem;
+  align-items: center;
+  flex-wrap: wrap;
 }
 
 .modal-footer .btn {
-  flex: 1;
+  flex: 1 1 140px;
 }
 
 .checkout-summary {

@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no" />
+    <meta name="theme-color" content="#FF3B30" />
+    <title>All Reviews | Chef Paul's Umami Pizza</title>
+    <meta name="description" content="Read all customer reviews for Chef Paul's Umami Pizza Kitchen." />
+    <link rel="icon" type="image/svg+xml" href="/pizza-icon.svg" />
+  </head>
+  <body>
+    <div id="app">
+      <nav class="navbar">
+        <div class="container reviews-header">
+          <div class="nav-brand">
+            <a href="index.html" class="back-link">← Back to Home</a>
+            <h1>Customer Reviews</h1>
+            <p class="reviews-subtitle">Browse ratings from 5 to 1 stars</p>
+          </div>
+          <div class="reviews-filter">
+            <label for="ratingFilter">Filter by rating</label>
+            <select id="ratingFilter" class="filter-select">
+              <option value="all">All ratings</option>
+              <option value="5">5 stars</option>
+              <option value="4">4 stars</option>
+              <option value="3">3 stars</option>
+              <option value="2">2 stars</option>
+              <option value="1">1 star</option>
+            </select>
+          </div>
+        </div>
+      </nav>
+
+      <section class="reviews-page">
+        <div class="container">
+          <div class="reviews-list" id="reviewsPageList">
+            <div class="loading">Loading reviews...</div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <script type="module" src="/src/reviews.js"></script>
+  </body>
+</html>
