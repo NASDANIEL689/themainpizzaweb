@@ -11,6 +11,14 @@ let cart = [];
 let selectedRating = 0;
 let userLocation = null; // Store user location for validation
 
+/**
+ * Generate a 6-digit order number
+ * @returns {string} 6-digit order number
+ */
+function generateOrderNumber() {
+  return Math.floor(100000 + Math.random() * 900000).toString();
+}
+
 function groupCartItems(items) {
   const grouped = {};
   items.forEach((item) => {
@@ -61,6 +69,9 @@ async function submitOrderToSupabase({ items, customerName, customerPhone, branc
   if (!order || !order.order_id) {
     throw new Error('Order could not be created. Please check Supabase configuration.');
   }
+
+  // Generate a 6-digit order number for easy reference
+  order.order_number = generateOrderNumber();
 
   return order;
 }
