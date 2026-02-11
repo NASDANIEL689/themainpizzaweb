@@ -12,6 +12,12 @@
     <link rel="icon" type="image/svg+xml" href="/pizza-icon.svg" />
   </head>
   <body>
+    <div id="loadingOverlay" class="loading-overlay">
+      <div class="loading-spinner">
+        <div class="spinner"></div>
+        <p>Loading your pizza experience...</p>
+      </div>
+    </div>
     <div id="app">
       <nav class="navbar">
         <div class="container">
@@ -48,7 +54,7 @@
           <p class="hero-subtitle">Experience the perfect blend of traditional Italian flavors and Botswana warmth at Chef Paul's Umami Pizza Kitchen</p>
           <div class="hero-cta">
             <a href="#menu" class="btn btn-primary btn-lg">Order Now</a>
-            <a href="#contact" class="btn btn-outline btn-lg">View Menu</a>
+            <a href="#specials" class="btn btn-outline btn-lg">View Specials</a>
           </div>
         </div>
         <div class="hero-image">
@@ -574,6 +580,15 @@
           <div class="modal-body">
             <div id="checkoutSummary" class="checkout-summary"></div>
             <form id="checkoutForm" class="checkout-form">
+              <div class="form-group">
+                <button type="button" class="btn btn-secondary btn-block" id="getLocationBtn">
+                  📍 Get My Location
+                </button>
+              </div>
+              <div id="locationInfo" class="location-info" style="display: none;">
+                <div id="locationStatus" class="location-status"></div>
+                <div id="branchDistances" class="branch-distances"></div>
+              </div>
               <div class="form-group">
                 <label>Order Type</label>
                 <div class="inline-options" id="orderTypeGroup">

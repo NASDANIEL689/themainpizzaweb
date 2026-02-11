@@ -1,8 +1,15 @@
 import './style.css';
 import { supabase } from './supabase.js';
+import {
+  getUserLocation,
+  checkDeliveryAvailability,
+  getAllBranchesWithDistance,
+  getClosestBranch
+} from './geolocation.js';
 
 let cart = [];
 let selectedRating = 0;
+let userLocation = null; // Store user location for validation
 
 function groupCartItems(items) {
   const grouped = {};
@@ -59,6 +66,12 @@ async function submitOrderToSupabase({ items, customerName, customerPhone, branc
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+  // Hide loading overlay once DOM is ready
+  const loadingOverlay = document.getElementById('loadingOverlay');
+  if (loadingOverlay) {
+    loadingOverlay.classList.add('hidden');
+  }
+
   initializeSizeSelectors();
   initializeCart();
   initializeStarRating();
@@ -488,6 +501,113 @@ function openCheckout() {
 
   syncAddressRequirement();
 
+  // Geolocation handling
+  const getLocationBtn = document.getElementById('getLocationBtn');
+  const locationInfo = document.getElementById('locationInfo');
+  const locationStatus = document.getElementById('locationStatus');
+  const branchDistances = document.getElementById('branchDistances');
+
+  if (getLocationBtn) {
+    getLocationBtn.addEventListener('click', async (e) => {
+      e.preventDefault();
+      getLocationBtn.disabled = true;
+      getLocationBtn.textContent = '📍 Getting location...';
+
+      try {
+        const location = await getUserLocation();
+        userLocation = location;
+
+        // Check delivery availability
+        const availability = checkDeliveryAvailability(location.lat, location.lng);
+        displayLocationInfo(availability, location);
+
+        // Update branch select with closest branch
+        const closestBranch = getClosestBranch(location.lat, location.lng);
+        if (closestBranch) {
+          branchSelect.value = closestBranch.name;
+          // Trigger change event to update summary
+          branchSelect.dispatchEvent(new Event('change'));
+        }
+
+        getLocationBtn.textContent = '✓ Location obtained';
+        getLocationBtn.style.background = '#4CAF50';
+      } catch (error) {
+        console.error('Location error:', error);
+        locationInfo.style.display = 'block';
+        const errorMsg = error.message || 'Unable to get location';
+        locationStatus.innerHTML = `
+          <span class="location-status-icon">❌</span>
+          <span>Error: ${errorMsg}</span>
+        `;
+        locationStatus.className = 'location-status error';
+        branchDistances.innerHTML = '';
+
+        getLocationBtn.textContent = '📍 Try Again';
+        getLocationBtn.style.background = '';
+      } finally {
+        getLocationBtn.disabled = false;
+      }
+    });
+  }
+
+  function displayLocationInfo(availability, location) {
+    locationInfo.style.display = 'block';
+    
+    // Update status
+    const statusClass = availability.isInRange ? 'success' : 'warning';
+    const statusIcon = availability.isInRange ? '✓' : '⚠️';
+    locationStatus.innerHTML = `
+      <span class="location-status-icon">${statusIcon}</span>
+      <span>${availability.reason}</span>
+    `;
+    locationStatus.className = `location-status ${statusClass}`;
+
+    // Display branch distances
+    const branches = getAllBranchesWithDistance(location.lat, location.lng);
+    let branchesHtml = '';
+
+    branches.forEach(branch => {
+      const isInRange = branch.inDeliveryRange;
+      const rangeClass = isInRange ? 'in-range' : 'out-of-range';
+      const distanceClass = isInRange ? 'distance in-range' : 'distance out-of-range';
+      const rangeText = isInRange ? '✓ In range' : '✗ Out of range';
+
+      branchesHtml += `
+        <div class="branch-distance-item ${rangeClass}">
+          <div>
+            <div class="branch-name">${branch.name}</div>
+            <div class="branch-distance ${distanceClass}">${branch.distance.toFixed(1)} km away - ${rangeText}</div>
+          </div>
+        </div>
+      `;
+    });
+
+    branchDistances.innerHTML = branchesHtml;
+
+    // Show warning if out of range for delivery
+    if (!availability.isInRange) {
+      const orderType = checkoutForm.querySelector('input[name="orderType"]:checked')?.value;
+      if (orderType === 'delivery') {
+        const warningDiv = document.createElement('div');
+        warningDiv.className = 'out-of-range-message';
+        warningDiv.innerHTML = `⚠️ Your location is outside our delivery radius. Please select Pickup instead or choose a delivery location closer to Gaborone.`;
+        locationInfo.insertBefore(warningDiv, locationStatus);
+      }
+    }
+  }
+
+  // Update checkout summary when branch changes
+  branchSelect?.addEventListener('change', () => {
+    renderCheckoutSummary(checkoutSummary);
+  });
+
+  // Update checkout summary when order type changes
+  orderTypeInputs?.forEach(input => {
+    input.addEventListener('change', () => {
+      renderCheckoutSummary(checkoutSummary);
+    });
+  });
+
   checkoutForm.onsubmit = async (e) => {
     e.preventDefault();
     placeOrderBtn.textContent = 'Placing order...';
@@ -504,6 +624,17 @@ function openCheckout() {
       placeOrderBtn.textContent = 'Place Order';
       placeOrderBtn.disabled = false;
       return;
+    }
+
+    if (orderType === 'delivery' && userLocation) {
+      // Check if user location is in delivery range
+      const availability = checkDeliveryAvailability(userLocation.lat, userLocation.lng);
+      if (!availability.isInRange) {
+        alert('Your location is outside our delivery range. Please select a different delivery address or choose pickup.');
+        placeOrderBtn.textContent = 'Place Order';
+        placeOrderBtn.disabled = false;
+        return;
+      }
     }
 
     if (orderType === 'delivery' && !address) {
@@ -524,6 +655,7 @@ function openCheckout() {
       });
 
       alert(`Order ${order.order_number || ''} placed for ${orderType === 'delivery' ? 'delivery' : 'pickup'} at ${branch}! We will contact you shortly to confirm.`);
+
       checkoutForm.reset();
       cart = [];
       updateCartCount();
